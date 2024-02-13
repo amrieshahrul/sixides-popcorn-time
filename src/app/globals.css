@@ -3,31 +3,146 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 214, 219, 220;
+	--background-end-rgb: 255, 255, 255;
+
+	--lightGrey: 227,227,227;
+	--darkerGrey: 200,200,200;
+	--tmdbDarkBlue: 3,37,65;
+	--tmdbLightBlue: 1,180,228;
+	--tmdbLighterGreen: 192,254,207;
+	--tmdbLightGreen: 30,213,169;
+	--tmdbLogoGreen: 144,206,161;
+	--tmdbLogoOrange: 253,193,112;
+	--tmdbLogoRed: 217,59,99;
+	--accountSilver: 149,149,149;
+	--accountPink: 234,20,140;
+	--accountPurple: 128,91,231;
+	--accountGreen: 1,210,119;
+	--accountTeal: 1,198,172;
+	--accountLightBlue: 1,180,228;
+	--accountBlue: 1,119,210;
+	--accountOrange: 210,119,1;
+	--accountYellow: 210,144,1;
+	--accountRed: 212,2,66;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+	--foreground-rgb: 255, 255, 255;
+	--background-start-rgb: 0, 0, 0;
+	--background-end-rgb: 0, 0, 0;
+	}
+}
+
+@layer base {
+	h1 {
+		/* @apply text-2xl font-bold; */
+		font-size: 3rem;
+		line-height: 3.5rem;
+		font-weight: 700;
+
+		@media (max-width: 1279px) {
+			font-size: 2.5rem;
+			line-height: 3rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 2rem;
+			line-height: 2.5rem;
+		}
+	}
+
+	h2 {
+	/* @apply text-xl font-bold; */
+		font-size: 2.5rem;
+		line-height: 3rem;
+		font-weight: 700;
+
+		@media (max-width: 1279px) {
+			font-size: 2rem;
+			line-height: 2.5rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 1.75rem;
+			line-height: 2.25rem;
+		}
+	}
+
+	h3 {
+	/* @apply text-lg font-bold; */
+		font-size: 2rem;
+		line-height: 2.5rem;
+		font-weight: 600;
+
+		@media (max-width: 1279px) {
+			font-size: 1.5rem;
+			line-height: 2rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 1.5rem;
+			line-height: 2rem;
+		}
+	}
+
+	h4 {
+		font-size: 1.5rem;
+		line-height: 2rem;
+		font-weight: bold;
+
+		@media (max-width: 1279px) {
+			font-size: 1.25rem;
+			line-height: 1.75rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 1.25rem;
+			line-height: 1.75rem;
+		}
+	}
+
+	h5 {
+		font-size: 1.25rem;
+		line-height: 1.75rem;
+		font-weight: 500;
+
+		@media (max-width: 1279px) {
+			font-size: 1.125rem;
+			line-height: 1.5rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 1.125rem;
+			line-height: 1.5rem;
+		}
+	}
+
+	h6 {
+		font-size: 1rem;
+		line-height: 1.375rem;
+		font-weight: 500;
+
+		@media (max-width: 1279px) {
+			font-size: 1rem;
+			line-height: 1.375rem;
+		}
+		@media (max-width: 767px) {
+			font-size: 1rem;
+			line-height: 1.375rem;
+		}
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
+	color: rgb(var(--background-end-rgb));
+	background-color: var(--background-end-rgb);
+	/* background: linear-gradient(
+		to bottom,
+		transparent,
+		rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--background-start-rgb)); */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.generic-container {
+	max-width: 1300px;
+	margin: 0 auto;
 }
