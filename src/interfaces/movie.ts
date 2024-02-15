@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface MovieContext {
-	movieList?: Object,
+	movieList?: MovieResult,
 	movieResults?: [],
 	sortBy: string,
 	filterByGenres?: [],
@@ -10,9 +10,9 @@ export interface MovieContext {
 	filterByMaxReleaseDate?: string,
 
 	setSortBy?: Function,
-	setFilterByGenres?: Function,
+	setFilterByGenres?: (filterWhatGenre: Number) => void,
 	setFilterByRatings?: Function,
-	setCurrentPage?: Function,
+	setCurrentPage?: (page: number) => void,
 
 	getMovies?: Function,
 
@@ -21,9 +21,29 @@ export interface MovieContext {
 	currentPage: number,
 }
 
+export interface MovieResult {
+	page: number,
+	total_pages: number,
+	total_results: number,
+	results: []
+}
+
 export interface MovieType {
 	id?: React.Key,
+	movieId?: number,
 	title: string,
 	release_date: string,
 	poster_path: string,
+}
+
+export interface MovieParams {
+	sortByWhat?: string,
+	currentPage?: number,
+	filterByGenres?: [],
+	filterByRatings?: string,
+}
+
+export interface CastType {
+	id: React.Key|string,
+	name: string,
 }
