@@ -47,7 +47,7 @@ export default function MovieDetailPopup ({
 		console.log('getMovieCredits', jsonResponse);
 		// setMovieDetail(jsonResponse);
 		return Promise.resolve(jsonResponse);
-	}
+	};
 
 	const getMovieDataFromAPI = async () => {
 		const [ detail, credits ] = await Promise.all([
