@@ -122,7 +122,7 @@ export default function FilterPopup () {
 									Close
 								</Button>
 								<Button color="primary" onPress={onFilterActionHandler}>
-									Action
+									Search
 								</Button>
 							</ModalFooter>
 						</div>
