@@ -8,3 +8,7 @@ export const monthsFromToday = (): string => {
 	return dayjs().subtract(43, 'days').format('YYYY-MM-DD');
 };
 
+export const getYearFormat = (date: string) => {
+	return dayjs(date).format('YYYY');
+};
+
