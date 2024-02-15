@@ -3,9 +3,12 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 interface ImageFallbackProp {
-	fallbackImage: string,
+	fallbackImage?: string,
 	alt: string,
 	src: string,
+	width: number,
+	height: number,
+	className: string,
 }
 
 export default function ImageFallback ({
