@@ -120,7 +120,7 @@ export default function MovieDetailPopup ({
 									height={300}
 									alt={movieDetail?.tagline ?? ''}
 									fallbackImage="/default-movie-poster.svg"
-									className="rounded-xl h-96 w-3/4 mx-auto md:w-auto"
+									className="rounded-xl h-96 w-3/4 mx-auto md:mx-0 md:w-auto"
 								/>
 								<div className="flex flex-col gap-y-4">
 									<div className="">
