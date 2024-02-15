@@ -46,4 +46,6 @@ export interface MovieParams {
 export interface CastType {
 	id: React.Key|string,
 	name: string,
+	character?: string,
+	profile_path?: string,
 }

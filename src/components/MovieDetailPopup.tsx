@@ -150,7 +150,7 @@ export default function MovieDetailPopup ({
 									<div className="">
 										<h6	className="text-tmdbLightGrey mb-2">Casts:</h6>
 										<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-											{computedCasts && computedCasts.map((cast) => (
+											{computedCasts && computedCasts.map((cast: CastType) => (
 												<div key={cast.id} className="relative group">
 													<ImageFallback
 														src={`${process.env.NEXT_PUBLIC_TMDB_IMG_DOMAIN}/w300${cast.profile_path}`}
