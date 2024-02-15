@@ -114,11 +114,12 @@ export default function MovieDetailPopup ({
 						</ModalHeader>
 						<ModalBody>
 							<div className="flex flex-col md:flex-row gap-y-6 md:gap-x-6">
-								<Image
+								<ImageFallback
 									src={computedImgSrc}
 									width={300}
 									height={300}
 									alt={movieDetail?.tagline ?? ''}
+									fallbackImage="/default-movie-poster.svg"
 									className="rounded-xl h-96 w-3/4 mx-auto md:w-auto"
 								/>
 								<div className="flex flex-col gap-y-4">

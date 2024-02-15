@@ -39,8 +39,9 @@ export default function MovieTile ({ movieId, title, releaseDate, posterPath, on
 					className="object-cover rounded-xl"
 					src={computedPosterPath}
 					width={270}
+					fallbackSrc="/default-movie-poster.svg"
 					classNames={{
-						'wrapper': 'w-full !max-w-full h-26 md:h-60',
+						'wrapper': 'w-full !max-w-full h-26 md:h-60  bg-cover bg-center',
 						'img': 'w-full h-full',
 					}}
 				/>
