@@ -1,0 +1,33 @@
+.GenreButtonBase {
+	transition: 200ms ease-in-out;
+	font-size: 14px;
+	border-radius: 9999px;
+	padding-bottom: 4px;
+	padding-top: 4px;
+	padding-right: 16px;
+	padding-left: 16px;
+}
+
+.GenreButton {
+	// text-align: left;
+	color: #bdbfd1;
+	border: 1px solid #bdbfd1;
+
+	&:hover {
+		color: #bdbfd1;
+	}
+}
+
+.GenreButtonActive {
+	// text-center text-sm text-white bg-[#3d4ef3] rounded-full py-1
+
+	text-align: center;
+	color: #fff;
+	background-color: #3d4ef3;
+	border: 1px solid transparent;
+
+	&:hover {
+		background-color: #5060ee;
+	}
+
+}
