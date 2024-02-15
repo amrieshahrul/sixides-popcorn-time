@@ -3,7 +3,6 @@ import fetching from '@/configs/fetching';
 
 export async function GET (request: NextRequest) {
 	const { searchParams, search } = new URL(request.url);
-	console.log('request', searchParams);
 
 	const resp = await fetching(`/discover/movie${search}`);
 	const jsonResponse = await resp?.json();
