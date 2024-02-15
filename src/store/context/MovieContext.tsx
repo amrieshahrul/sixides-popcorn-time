@@ -8,13 +8,50 @@ import {
 	GET_MOVIES,
 	SET_CURRENT_PAGE,
 } from '../reducer/movieReducer';
-import { MovieContext } from '@/interfaces/movie';
+import { MovieContext, MovieParams } from '@/interfaces/movie';
 import { todayMinusOne, monthsFromToday } from '@/helpers/time';
 
 const MovieContext = createContext<MovieContext>(initial);
 
 export const MovieProvider = ({ children }: Readonly<{ children: React.ReactNode; }>) => {
 	const [ state, dispatch ] = useReducer(movieReducer, initial);
+
+	const getAllMovieParams = ({
+		sortByWhat,
+		currentPage,
+		filterByRatings,
+		filterByGenres,
+
+	}: MovieParams) => {
+		const urlParams = new URLSearchParams();
+
+		urlParams.set('sort_by', sortByWhat ?? state.sortBy);
+		urlParams.set('page', currentPage ?? state.currentPage);
+
+		if (filterByRatings || state.filterByRatings) {
+			const ratings = filterByRatings?.split(',') ?? state.filterByRatings?.split(',');
+			urlParams.set('vote_average.gte', ratings[0]);
+			urlParams.set('vote_average.lte', ratings[1]);
+		}
+
+		if (filterByGenres || state.filterByGenres) {
+			const selectedGenres = filterByGenres?.join(',') ?? state.filterByGenres.join(',');
+			urlParams.set('with_genres', selectedGenres);
+		}
+
+		// Today minus one and 43 days past from today
+		urlParams.set('release_date.lte', todayMinusOne());
+		urlParams.set('release_date.gte', monthsFromToday());
+
+		// Target for Malaysia region
+		urlParams.set('watch_region', 'MY');
+
+		// Show everthing
+		urlParams.set('show_me', '0');
+
+
+		return urlParams.toString();
+	};
 
 	const setSortBy: Function = async (sortByWhat: string) => {
 		dispatch({
@@ -23,9 +60,24 @@ export const MovieProvider = ({ children }: Readonly<{ children: React.ReactNode
 				sortBy: sortByWhat,
 			},
 		});
+
+		// const urlParams = new URLSearchParams();
+		// urlParams.set('sort_by', sortByWhat);
+
+		const data = await fetch(`/api/discover?${getAllMovieParams({
+			sortByWhat,
+		})}`);
+		const jsonResponse = await data.json();
+
+		dispatch({
+			type: GET_MOVIES,
+			payload: {
+				movieList: jsonResponse,
+			},
+		});
 	};
 
-	const setFilterByGenres = (filterWhatGenre: Number) => {
+	const setFilterByGenres = (filterWhatGenre: Number): void => {
 		if (!state.filterByGenres.includes(filterWhatGenre)) {
 			const selectedGenres = [ ...state.filterByGenres, filterWhatGenre];
 
@@ -60,31 +112,14 @@ export const MovieProvider = ({ children }: Readonly<{ children: React.ReactNode
 
 
 	const getMovies = async () => {
-		const urlParams = new URLSearchParams();
 
-		if (state.sortBy) {
-			urlParams.set('sort_by', state.sortBy);
-		}
+		const data = await fetch(`/api/discover?${getAllMovieParams({
+			sortByWhat: state.sortBy,
+			currentPage: state.currentPage,
+			filterByRatings: state.filterByRatings,
+			filterByGenres: state.filterByGenres,
 
-		if (state.currentPage) {
-			urlParams.set('page', state.currentPage);
-		}
-
-		if (state.filterByRatings) {
-			urlParams.set('vote_count.gte', state.filterByRatings);
-		}
-
-		if (state.filterByGenres.length) {
-			const selectedGenres = state.filterByGenres.join(',');
-			urlParams.set('with_genres', selectedGenres);
-		}
-
-		urlParams.set('release_date.lte', todayMinusOne());
-		urlParams.set('release_date.gte', monthsFromToday());
-
-		// release_date.gte=2024-01-03
-
-		const data = await fetch(`/api/discover?${urlParams.toString()}`);
+		})}`);
 		const jsonResponse = await data.json();
 
 		dispatch({
@@ -95,11 +130,23 @@ export const MovieProvider = ({ children }: Readonly<{ children: React.ReactNode
 		});
 	};
 
-	const setCurrentPage = (page: number) => {
+	const setCurrentPage = async (page: number) => {
 		dispatch({
 			type: SET_CURRENT_PAGE,
 			payload: {
 				currentPage: page,
+			},
+		});
+
+		const data = await fetch(`/api/discover?${getAllMovieParams({
+			currentPage: page,
+		})}`);
+		const jsonResponse = await data.json();
+
+		dispatch({
+			type: GET_MOVIES,
+			payload: {
+				movieList: jsonResponse,
 			},
 		});
 	};
@@ -108,6 +155,7 @@ export const MovieProvider = ({ children }: Readonly<{ children: React.ReactNode
 	const value: MovieContext = {
 		sortBy: state.sortBy,
 		filterByGenres: state.filterByGenres,
+		filterByRatings: state.filterByRatings,
 		isGenreSelected,
 
 		setSortBy,

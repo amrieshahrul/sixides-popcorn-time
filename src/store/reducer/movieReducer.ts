@@ -19,6 +19,7 @@ export const initial: MovieContext = {
 	sortBy: 'popularity.desc',
 	filterByGenres: [],
 	currentPage: 1,
+	filterByRatings: '0,10',
 };
 
 
