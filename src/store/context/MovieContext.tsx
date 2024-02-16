@@ -1,3 +1,4 @@
+'use client';
 import React, { useContext, createContext, useReducer } from 'react';
 import {
 	initial,
