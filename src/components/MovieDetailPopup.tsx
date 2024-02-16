@@ -132,7 +132,7 @@ export default function MovieDetailPopup ({
 										<h6 className="text-tmdbLightGrey">Release Date:</h6>
 										<p className="mt-1 text-sm text-primary-grey">{movieDetail.release_date}</p>
 									</div>
-									<div className="flex gap-x-12 flex-wrap">
+									<div className="flex gap-x-12 gap-y-4 flex-wrap">
 										{computedDirectors && computedDirectors.map((director: CastType) => (
 											<div key={director.id} className="">
 												<h6 className="text-tmdbLightGrey">Director:</h6>
