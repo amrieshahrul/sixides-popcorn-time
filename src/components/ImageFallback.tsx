@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 
 interface ImageFallbackProp {
 	fallbackImage?: string,
@@ -18,13 +18,16 @@ export default function ImageFallback ({
 	...props
 }: ImageFallbackProp) {
 
-	const [ error, setError ] = useState(false);
+	const [ error, setError ] = useState<boolean | null | SyntheticEvent<HTMLImageElement, Event>>(null);
 
+	useEffect(() => {
+		setError(null);
+	}, [src]);
 
 
 	return (
 		<Image
-			onError={() => setError(true)}
+			onError={setError}
 			src={error ? fallbackImage : src}
 			alt={alt}
 			{...props}
