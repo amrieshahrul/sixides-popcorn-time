@@ -1,18 +1,11 @@
 'use client';
-import { useMovie } from '@/store/context/MovieContext';
 import MovieTile from './MovieTile';
-import { MovieContext, MovieType } from '@/interfaces/movie';
+import { MovieType } from '@/interfaces/movie';
 import {
 	Pagination,
-	Button,
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
 	useDisclosure,
 } from '@nextui-org/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import MovieDetailPopup from './MovieDetailPopup';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
