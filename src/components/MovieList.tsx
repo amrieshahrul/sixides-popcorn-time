@@ -12,28 +12,54 @@ import {
 	ModalFooter,
 	useDisclosure,
 } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MovieDetailPopup from './MovieDetailPopup';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
-export default function MovieList () {
+export default function MovieList ({ movieList }) {
+	const pathname = usePathname();
+	const { replace } = useRouter();
+	const searchParams = useSearchParams();
+
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure({
 		defaultOpen: false,
 	});
 	const [ currentMovieId, setCurrentMovieId ] = useState<number|React.Key|null>(null);
 
-	const { movieList, getMovies, currentPage, setCurrentPage }: MovieContext = useMovie();
+	const [ currentPage, setCurrentPage ] = useState<number>(1);
 
-	useEffect(() => {
-		if (getMovies) getMovies();
+	// const { movieList, getMovies, currentPage, setCurrentPage }: MovieContext = useMovie();
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+
+	const computedDefaultPaginationValue = useMemo(() => {
+		if (!searchParams.get('page')) {
+			return 1;
+		}
+
+		const defaultPageNumber = searchParams.get('page');
+
+		return parseInt(defaultPageNumber);
+	}, [searchParams]);
 
 
 	const onMovieTileClickHandler = (id: number|React.Key) => {
 		onOpen();
 		setCurrentMovieId(id);
 	};
+
+	const setCurrentPageHandler = (page: number) => {
+		setCurrentPage(page);
+
+		const params = new URLSearchParams(searchParams);
+
+		params.set('page', page.toString());
+
+		replace(`${pathname}?${params.toString()}`);
+	};
+
+	useEffect(() => {
+		setCurrentPage(computedDefaultPaginationValue);
+	}, [computedDefaultPaginationValue]);
 
 	return (
 		<>
@@ -52,13 +78,18 @@ export default function MovieList () {
 
 			{movieList && movieList.total_pages > 1 && (
 				<div className="pagination mt-10 flex justify-center">
-					<Pagination isCompact showControls total={movieList?.total_pages} page={currentPage} onChange={setCurrentPage} />
+					<Pagination
+						isCompact
+						showControls
+						total={movieList?.total_pages}
+						page={computedDefaultPaginationValue}
+						onChange={setCurrentPageHandler} />
 				</div>
 			)}
 
-			{isOpen && (
+			{/* {isOpen && (
 				<MovieDetailPopup movieId={currentMovieId} isOpen={isOpen} onOpenChange={onOpenChange} />
-			)}
+			)} */}
 		</>
 	);
 

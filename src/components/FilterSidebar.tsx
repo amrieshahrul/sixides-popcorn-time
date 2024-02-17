@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, SetStateAction, Dispatch } from 'react';
 import { genreList } from '@/mocks/genreList.js';
 import styles from '@/styles/FilterSidebar.module.scss';
 import classNames from 'classnames';
@@ -9,56 +9,107 @@ import { Slider,
 } from '@nextui-org/react';
 import { MovieContext } from '@/interfaces/movie';
 import { useMovie } from '@/store/context/MovieContext';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+
+// interface RatingType {
+// 	key: string[string] | number
+// }
 
 export default function FilterSidebar () {
 
 	const [ genres, setGenres ] = useState<Number[]>([]);
+	const [ ratingValue, setRatingValue ] = useState<number | number[] | string[]>([0, 10]);
+
+	const pathname = usePathname();
+	const { replace } = useRouter();
+	const searchParams = useSearchParams();
 
 	const {
-		setFilterByGenres,
-		setFilterByRatings,
-		getMovies,
-		isGenreSelected,
+		// setFilterByGenres,
+		// setFilterByRatings,
+		// getMovies,
+		// isGenreSelected,
 		filterByRatings,
 	}: MovieContext = useMovie();
 
 	const onGenreClickHandler = (id: Number) => {
-		// if (!genres.includes(id)) {
-		// 	setGenres([...genres, id]);
-		// } else {
-		// 	const allGenres = genres;
-		// 	setGenres(allGenres.filter((genre) => genre !== id));
-		// }
-		if (setFilterByGenres) {
-			setFilterByGenres(id);
+		if (!genres.includes(id)) {
+			setGenres([...genres, id]);
+		} else {
+			const allGenres = genres;
+			setGenres(allGenres.filter((genre) => genre !== id));
 		}
+		// if (setFilterByGenres) {
+		// 	setFilterByGenres(id);
+		// }
 	};
 
 	const onRatingsChangeHandler = (ratingValue: Number | Number[]) => {
-		if (setFilterByRatings) {
-			setFilterByRatings(ratingValue);
-		}
+		// if (setFilterByRatings) {
+		// 	setFilterByRatings(ratingValue);
+		// }
 	};
 
-	// useEffect(() => {
-	// 	if (getMovies) {
-	// 		getMovies();
-	// 	}
-	// }, []);
 
-	const onFilterClickHandler = () => {
 
-		if (getMovies) {
-			getMovies();
-		}
-	};
+	const computedGenresStringArray = useMemo(() => {
+		const stringArray = genres.map((genre) => genre.toString());
+		const arrayToString = stringArray.join(',');
 
+		return encodeURIComponent(arrayToString);
+	}, [genres]);
 
 	const computedSliderValue = useMemo(() => {
-		const stringToArray = filterByRatings?.split(',').map((rating) => parseInt(rating));
+		const currentValue: number[] | any = ratingValue;
 
-		return stringToArray;
-	}, [filterByRatings]);
+		return {
+			'voteAverageGte': currentValue[0].toString(),
+			'voteAverageLte': currentValue[1].toString(),
+		};
+	}, [ratingValue]);
+
+	const computedDefaultRatingValue = useMemo(() => {
+		if (!(searchParams.get('vote_average.gte') || searchParams.get('vote_average.lte'))) {
+			return [0, 10];
+		}
+
+		const voteGte = searchParams.get('vote_average.gte');
+		const voteLte = searchParams.get('vote_average.lte');
+
+		return [
+			parseInt(voteGte || '0'),
+			parseInt(voteLte || '10'),
+		];
+	}, [searchParams]);
+
+	const onFilterClickHandler = () => {
+		const params = new URLSearchParams(searchParams);
+
+		if (computedGenresStringArray) {
+			params.set('with_genres', computedGenresStringArray);
+		} else {
+			params.delete('with_genres');
+		}
+
+		if (computedSliderValue) {
+			params.set('vote_average.gte', computedSliderValue.voteAverageGte);
+			params.set('vote_average.lte', computedSliderValue.voteAverageLte);
+		}
+
+		replace(`${pathname}?${params.toString()}`);
+	};
+
+	const isGenreSelected = (genreId: Number): boolean => {
+		return genres.includes(genreId);
+	};
+
+	const setRatingHandler = (value: number | number[]) => {
+		setRatingValue(value);
+	};
+
+	useEffect(() => {
+		setRatingValue(computedDefaultRatingValue);
+	}, [computedDefaultRatingValue]);
 
 	return (
 		<div className="flex flex-col gap-y-8">
@@ -75,9 +126,9 @@ export default function FilterSidebar () {
 					step={1}
 					maxValue={10}
 					minValue={0}
-					value={computedSliderValue}
 					className="max-w-md"
-					onChange={onRatingsChangeHandler}
+					defaultValue={computedDefaultRatingValue}
+					onChange={setRatingHandler}
 					renderLabel={() => (
 						<div className="font-medium">Ratings:</div>
 					)}

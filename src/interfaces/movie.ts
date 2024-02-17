@@ -49,3 +49,11 @@ export interface CastType {
 	character?: string,
 	profile_path?: string,
 }
+
+export enum ParamKeys {
+	SORT_BY = 'sort_by',
+	PAGE = 'page',
+	WITH_GENRES = 'with_genres',
+	VOTE_GTE = 'vote_average.gte',
+	VOTE_LTE = 'vote_average.lte',
+}
