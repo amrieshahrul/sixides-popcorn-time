@@ -16,7 +16,15 @@ import { useEffect, useMemo, useState } from 'react';
 import MovieDetailPopup from './MovieDetailPopup';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
-export default function MovieList ({ movieList }) {
+type MovieListProp = {
+	[key: string]: {
+		results: [],
+		total_pages: number,
+		page: number,
+	}
+}
+
+export default function MovieList ({ movieList }: MovieListProp) {
 	const pathname = usePathname();
 	const { replace } = useRouter();
 	const searchParams = useSearchParams();
@@ -26,19 +34,17 @@ export default function MovieList ({ movieList }) {
 	});
 	const [ currentMovieId, setCurrentMovieId ] = useState<number|React.Key|null>(null);
 
-	const [ currentPage, setCurrentPage ] = useState<number>(1);
-
-	// const { movieList, getMovies, currentPage, setCurrentPage }: MovieContext = useMovie();
+	// const [ currentPage, setCurrentPage ] = useState<number>(1);
 
 
-	const computedDefaultPaginationValue = useMemo(() => {
+	const computedDefaultPaginationValue: number = useMemo(() => {
 		if (!searchParams.get('page')) {
 			return 1;
 		}
 
 		const defaultPageNumber = searchParams.get('page');
 
-		return parseInt(defaultPageNumber);
+		return parseInt(defaultPageNumber || '1');
 	}, [searchParams]);
 
 
@@ -48,18 +54,15 @@ export default function MovieList ({ movieList }) {
 	};
 
 	const setCurrentPageHandler = (page: number) => {
-		setCurrentPage(page);
-
 		const params = new URLSearchParams(searchParams);
-
 		params.set('page', page.toString());
 
 		replace(`${pathname}?${params.toString()}`);
 	};
 
-	useEffect(() => {
-		setCurrentPage(computedDefaultPaginationValue);
-	}, [computedDefaultPaginationValue]);
+	// useEffect(() => {
+	// 	setCurrentPage(computedDefaultPaginationValue);
+	// }, [computedDefaultPaginationValue]);
 
 	return (
 		<>
@@ -87,9 +90,9 @@ export default function MovieList ({ movieList }) {
 				</div>
 			)}
 
-			{/* {isOpen && (
+			{isOpen && (
 				<MovieDetailPopup movieId={currentMovieId} isOpen={isOpen} onOpenChange={onOpenChange} />
-			)} */}
+			)}
 		</>
 	);
 

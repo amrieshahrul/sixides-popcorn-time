@@ -11,16 +11,6 @@ export const fetchMovies = async (searchParams: SearchParamsProps) => {
 	try {
 		const params = new URLSearchParams();
 
-		// if (searchParams.)
-
-		// if (Object.keys(searchParams).length) {
-		// 	const paramsKey = Object.keys(searchParams);
-
-		// 	paramsKey.forEach((param) => {
-		// 		params.set(param, searchParams[param]);
-		// 	});
-		// }
-
 		if (searchParams['sort_by']) {
 			params.set(ParamKeys.SORT_BY, searchParams[ParamKeys.SORT_BY]);
 		}

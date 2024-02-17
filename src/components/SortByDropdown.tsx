@@ -2,21 +2,12 @@
 import {
 	Select,
 	SelectItem,
-	Card,
-	CardHeader,
-	CardBody,
-	Image,
 } from '@nextui-org/react';
 import { sortByList } from '@/mocks/sortByList.js';
-import { useEffect, useMemo, useState } from 'react';
-import { useMovie } from '@/store/context/MovieContext';
-import { MovieContext } from '@/interfaces/movie';
+import { useState } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export default function SortByDropdown () {
-	const [value, setValue] = useState<string>('');
-	const { setSortBy, getMovies, sortBy }: MovieContext = useMovie();
-
 	const pathname = usePathname();
 	const { replace } = useRouter();
 	const searchParams = useSearchParams();
@@ -35,10 +26,6 @@ export default function SortByDropdown () {
 		const value = params.get('sort_by');
 		return value ?? 'popularity.desc';
 	};
-
-	// useEffect(() => {
-	// 	if (getMovies) getMovies();
-	// }, [sortBy]);
 
 	return (
 		<>

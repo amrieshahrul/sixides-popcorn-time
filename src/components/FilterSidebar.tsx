@@ -1,19 +1,12 @@
 'use client';
-import { useState, useMemo, useCallback, useEffect, SetStateAction, Dispatch } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { genreList } from '@/mocks/genreList.js';
 import styles from '@/styles/FilterSidebar.module.scss';
 import classNames from 'classnames';
 import { Slider,
-	Input,
 	Button,
 } from '@nextui-org/react';
-import { MovieContext } from '@/interfaces/movie';
-import { useMovie } from '@/store/context/MovieContext';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-
-// interface RatingType {
-// 	key: string[string] | number
-// }
 
 export default function FilterSidebar () {
 
@@ -24,14 +17,6 @@ export default function FilterSidebar () {
 	const { replace } = useRouter();
 	const searchParams = useSearchParams();
 
-	const {
-		// setFilterByGenres,
-		// setFilterByRatings,
-		// getMovies,
-		// isGenreSelected,
-		filterByRatings,
-	}: MovieContext = useMovie();
-
 	const onGenreClickHandler = (id: Number) => {
 		if (!genres.includes(id)) {
 			setGenres([...genres, id]);
@@ -39,18 +24,7 @@ export default function FilterSidebar () {
 			const allGenres = genres;
 			setGenres(allGenres.filter((genre) => genre !== id));
 		}
-		// if (setFilterByGenres) {
-		// 	setFilterByGenres(id);
-		// }
 	};
-
-	const onRatingsChangeHandler = (ratingValue: Number | Number[]) => {
-		// if (setFilterByRatings) {
-		// 	setFilterByRatings(ratingValue);
-		// }
-	};
-
-
 
 	const computedGenresStringArray = useMemo(() => {
 		const stringArray = genres.map((genre) => genre.toString());
