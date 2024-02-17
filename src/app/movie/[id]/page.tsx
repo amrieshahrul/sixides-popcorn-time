@@ -24,7 +24,7 @@ export default async function MovieDetail ({
 					height={300}
 					alt={movieDetails?.tagline ?? ''}
 					fallbackImage="/default-movie-poster.svg"
-					className="rounded-xl h-120 w-3/4 mx-auto md:mx-0 md:w-2/4"
+					className="rounded-xl h-120 md:h-96 lg:h-auto w-3/4 mx-auto lg:mx-0 lg:w-2/4"
 				/>
 				<div className="flex flex-col gap-y-4">
 					<div className="">
@@ -54,7 +54,7 @@ export default async function MovieDetail ({
 					</div>
 					<div className="">
 						<h6	className="text-tmdbLightGrey mb-2">Casts:</h6>
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
 							{movieCastDetails && movieCastDetails.crewMember.map((cast: CastType) => (
 								<div key={cast.id} className="relative group">
 									<ImageFallback
