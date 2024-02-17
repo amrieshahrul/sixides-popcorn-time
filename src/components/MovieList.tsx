@@ -6,7 +6,6 @@ import {
 	useDisclosure,
 } from '@nextui-org/react';
 import { useMemo, useState } from 'react';
-import MovieDetailPopup from './MovieDetailPopup';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -86,10 +85,6 @@ export default function MovieList ({ movieList }: MovieListProp) {
 						onChange={setCurrentPageHandler} />
 				</div>
 			)}
-
-			{/* {isOpen && (
-				<MovieDetailPopup movieId={currentMovieId} isOpen={isOpen} onOpenChange={onOpenChange} />
-			)} */}
 		</>
 	);
 
