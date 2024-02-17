@@ -35,7 +35,7 @@ export default function SortByDropdown () {
 				defaultSelectedKeys={[getCurrentSortByValue()]}
 				classNames={{
 					// 'base': 'w-2/12',
-					'trigger': 'px-4',
+					'trigger': 'px-6 lg:px-4',
 				}}
 				onChange={handleSelectionChange}
 			>
