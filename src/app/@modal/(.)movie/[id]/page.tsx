@@ -13,8 +13,6 @@ export default async function MovieDetail ({ params }: { params: { id: string } 
 		fetchMovieCastDetails(params.id),
 	]);
 
-	console.log('movieDetails', movieCastDetails);
-
 	return (
 		<MovieDetailsModal
 			movieDetails={movieDetails}
