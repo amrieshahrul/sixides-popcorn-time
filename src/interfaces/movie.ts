@@ -47,7 +47,7 @@ export interface CastType {
 	id: React.Key|string,
 	name: string,
 	character?: string,
-	profile_path?: string,
+	profile_path?: string | undefined,
 }
 
 export enum ParamKeys {
