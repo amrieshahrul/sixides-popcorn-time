@@ -8,6 +8,7 @@ import {
 import { useMemo, useState } from 'react';
 import MovieDetailPopup from './MovieDetailPopup';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type MovieListProp = {
 	[key: string]: {
@@ -61,14 +62,17 @@ export default function MovieList ({ movieList }: MovieListProp) {
 		<>
 			<div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
 				{movieList && movieList.results.map((movie: MovieType) => (
-					<MovieTile
-						key={movie.id}
-						movieId={movie.id}
-						title={movie.title}
-						posterPath={movie.poster_path}
-						releaseDate={movie.release_date}
-						onClick={(id) => onMovieTileClickHandler(id)}
-					/>
+					<Link key={movie.id} href={{
+						pathname: `/movie/${movie.id}`,
+						search: searchParams.toString(),
+					}} scroll={false}>
+						<MovieTile
+							movieId={movie.id}
+							title={movie.title}
+							posterPath={movie.poster_path}
+							releaseDate={movie.release_date}
+						/>
+					</Link>
 				))}
 			</div>
 
@@ -83,9 +87,9 @@ export default function MovieList ({ movieList }: MovieListProp) {
 				</div>
 			)}
 
-			{isOpen && (
+			{/* {isOpen && (
 				<MovieDetailPopup movieId={currentMovieId} isOpen={isOpen} onOpenChange={onOpenChange} />
-			)}
+			)} */}
 		</>
 	);
 

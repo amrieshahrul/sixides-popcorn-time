@@ -10,14 +10,14 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export default function FilterSidebar () {
 
-	const [ genres, setGenres ] = useState<Number[]>([]);
+	const [ genres, setGenres ] = useState<number[]>([]);
 	const [ ratingValue, setRatingValue ] = useState<number | number[] | string[]>([0, 10]);
 
 	const pathname = usePathname();
 	const { replace } = useRouter();
 	const searchParams = useSearchParams();
 
-	const onGenreClickHandler = (id: Number) => {
+	const onGenreClickHandler = (id: number) => {
 		if (!genres.includes(id)) {
 			setGenres([...genres, id]);
 		} else {
@@ -30,8 +30,20 @@ export default function FilterSidebar () {
 		const stringArray = genres.map((genre) => genre.toString());
 		const arrayToString = stringArray.join(',');
 
-		return encodeURIComponent(arrayToString);
+		return arrayToString;
 	}, [genres]);
+
+	const computedDefaultGenresValue = useMemo(() => {
+
+		if (searchParams.has('with_genres')) {
+			const defaultParams = searchParams.get('with_genres');
+			const decode = decodeURIComponent(defaultParams ?? '');
+			return decode.split(',').map((genreId) => parseInt(genreId));
+		}
+
+		return [];
+
+	}, [searchParams]);
 
 	const computedSliderValue = useMemo(() => {
 		const currentValue: number[] | any = ratingValue;
@@ -73,8 +85,8 @@ export default function FilterSidebar () {
 		replace(`${pathname}?${params.toString()}`);
 	};
 
-	const isGenreSelected = (genreId: Number): boolean => {
-		return genres.includes(genreId);
+	const isGenreSelected = (genreId: number): boolean => {
+		return genres?.includes(genreId);
 	};
 
 	const setRatingHandler = (value: number | number[]) => {
@@ -83,7 +95,11 @@ export default function FilterSidebar () {
 
 	useEffect(() => {
 		setRatingValue(computedDefaultRatingValue);
-	}, [computedDefaultRatingValue]);
+		setGenres(computedDefaultGenresValue);
+	}, [
+		computedDefaultRatingValue,
+		computedDefaultGenresValue,
+	]);
 
 	return (
 		<div className="flex flex-col gap-y-8">

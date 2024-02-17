@@ -2,6 +2,7 @@
 import fetching from '@/configs/fetching';
 import { monthsFromToday, todayMinusOne } from '@/helpers/time';
 import { ParamKeys } from '@/interfaces/movie';
+import { filter } from 'lodash';
 
 interface SearchParamsProps {
 	[key: string]: string,
@@ -44,5 +45,38 @@ export const fetchMovies = async (searchParams: SearchParamsProps) => {
 		return jsonResponse;
 	} catch (err) {
 		console.error('fetchMovies', err);
+	}
+};
+
+export const fetchMovieDetails = async (movieId: string) => {
+	try {
+		const response = await fetching(`/movie/${movieId}`);
+		const jsonResponse = await response?.json();
+
+		return jsonResponse;
+	} catch (err) {
+		console.error('fetchMovieDetails', err);
+	}
+};
+
+export const fetchMovieCastDetails = async (movieId: string) => {
+	try {
+		const response = await fetching(`/movie/${movieId}/credits`);
+		const { cast, crew } = await response?.json();
+
+		const crewMember = filter(crew, (cast: any) => ['Director', 'Writer', 'Characters'].includes(cast.job));
+
+		const directors = filter(crew, (cast: any) => ['Director'].includes(cast.job));
+
+		const writers = filter(crew, (cast: any) => ['Writer'].includes(cast.job));
+
+		return {
+			crewMember,
+			cast,
+			directors,
+			writers,
+		};
+	} catch (err) {
+		console.error('fetchMovieCastDetails', err);
 	}
 };

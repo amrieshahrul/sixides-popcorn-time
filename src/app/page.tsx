@@ -2,8 +2,9 @@ import FilterPopup from '@/components/FilterPopup';
 import FilterSidebar from '@/components/FilterSidebar';
 import MovieList from '@/components/MovieList';
 import SortByDropdown from '@/components/SortByDropdown';
-import { fetchMovies } from './lib/movie-api';
+import { fetchMovies } from '@/lib/movie-api';
 import { ParamKeys } from '@/interfaces/movie';
+import Link from 'next/link';
 
 interface SearchParamsProps {
 	searchParams?: {
@@ -49,6 +50,11 @@ export default async function Home ({
 
 					<div className="">
 						<MovieList movieList={movies} />
+						{/* {movies && movies.results.map((movie: any) => (
+							<Link key={movie} href={`/movie/${movie.id}`}>
+								{movie.id}
+							</Link>
+						))} */}
 					</div>
 				</div>
 			</div>

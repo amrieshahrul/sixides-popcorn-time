@@ -14,7 +14,7 @@ interface MovieTileProp {
 	title: string,
 	releaseDate: string,
 	posterPath: string,
-	onClick: (id: number|string|React.Key) => void,
+	onClick?: (id: number|string|React.Key) => void,
 }
 
 export default function MovieTile ({ movieId, title, releaseDate, posterPath, onClick }: MovieTileProp) {
@@ -25,14 +25,8 @@ export default function MovieTile ({ movieId, title, releaseDate, posterPath, on
 		}
 	}, [posterPath]);
 
-	const onPressHandler = () => {
-		if (movieId && movieId !== undefined) {
-			onClick(movieId);
-		}
-	};
-
 	return (
-		<Card isPressable onPress={onPressHandler} className="py-4 pt-0">
+		<Card className="py-4 pt-0 w-full">
 			<CardBody className="overflow-visible py-2">
 				<Image
 					alt={title}
