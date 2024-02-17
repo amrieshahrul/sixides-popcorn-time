@@ -22,7 +22,6 @@ export default function SortByDropdown () {
 
 	const getCurrentSortByValue = (): string => {
 		const params = new URLSearchParams(searchParams);
-		console.log(params.get('sort_by'));
 		const value = params.get('sort_by');
 		return value ?? 'popularity.desc';
 	};

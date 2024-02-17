@@ -38,8 +38,6 @@ export const fetchMovies = async (searchParams: SearchParamsProps) => {
 		// Show everthing
 		params.set('show_me', '0');
 
-		console.log(`/discover/movie?${params.toString()}`);
-
 		const resp = await fetching(`/discover/movie?${params.toString()}`);
 		const jsonResponse = await resp?.json();
 
