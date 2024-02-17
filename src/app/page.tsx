@@ -40,7 +40,7 @@ export default async function Home ({
 				<div className="movie-list w-full md:w-10/12">
 					<div className="flex justify-end gap-x-3">
 						<div className="w-1/2 md:hidden">
-							{/* <FilterPopup /> */}
+							<FilterPopup />
 						</div>
 						<div className="w-1/2 md:w-3/12">
 							<SortByDropdown />
@@ -49,7 +49,6 @@ export default async function Home ({
 
 					<div className="">
 						<MovieList movieList={movies} />
-						{/* {JSON.stringify(movies)} */}
 					</div>
 				</div>
 			</div>

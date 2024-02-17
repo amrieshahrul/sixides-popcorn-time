@@ -9,56 +9,91 @@ import {
 	useDisclosure,
 	Slider,
 } from '@nextui-org/react';
-import { useMovie } from '@/store/context/MovieContext';
-import { MovieContext } from '@/interfaces/movie';
 import { genreList } from '@/mocks/genreList.js';
 import styles from '@/styles/FilterSidebar.module.scss';
 import classNames from 'classnames';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import customMotionProps from '@/configs/customMotionProps.js';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export default function FilterPopup () {
-	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+	const pathname = usePathname();
+	const { replace } = useRouter();
+	const searchParams = useSearchParams();
 
-	const {
-		setFilterByGenres,
-		setFilterByRatings,
-		getMovies,
-		isGenreSelected,
-		filterByRatings,
-	}: MovieContext = useMovie();
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+	const [ genres, setGenres ] = useState<Number[]>([]);
+	const [ ratingValue, setRatingValue ] = useState<number | number[] | string[]>([0, 10]);
 
 	const onGenreClickHandler = (id: Number) => {
-		// if (!genres.includes(id)) {
-		// 	setGenres([...genres, id]);
-		// } else {
-		// 	const allGenres = genres;
-		// 	setGenres(allGenres.filter((genre) => genre !== id));
-		// }
-		if (setFilterByGenres) {
-			setFilterByGenres(id);
+		if (!genres.includes(id)) {
+			setGenres([...genres, id]);
+		} else {
+			const allGenres = genres;
+			setGenres(allGenres.filter((genre) => genre !== id));
 		}
 	};
 
-	const onRatingsChangeHandler = (ratingValue: Number | Number[]) => {
-		if (setFilterByRatings) {
-			setFilterByRatings(ratingValue);
-		}
+	const isGenreSelected = (genreId: Number): boolean => {
+		return genres.includes(genreId);
 	};
 
 	const onFilterActionHandler = () => {
+		const params = new URLSearchParams(searchParams);
 
-		if (getMovies) {
-			onClose();
-			getMovies();
+		if (computedGenresStringArray) {
+			params.set('with_genres', computedGenresStringArray);
+		} else {
+			params.delete('with_genres');
 		}
+
+		if (computedSliderValue) {
+			params.set('vote_average.gte', computedSliderValue.voteAverageGte);
+			params.set('vote_average.lte', computedSliderValue.voteAverageLte);
+		}
+
+		replace(`${pathname}?${params.toString()}`);
+
+		onClose();
 	};
 
-	const computedSliderValue = useMemo(() => {
-		const stringToArray = filterByRatings?.split(',').map((rating) => parseInt(rating));
+	const setRatingHandler = (value: number | number[]) => {
+		setRatingValue(value);
+	};
 
-		return stringToArray;
-	}, [filterByRatings]);
+	const computedGenresStringArray = useMemo(() => {
+		const stringArray = genres.map((genre) => genre.toString());
+		const arrayToString = stringArray.join(',');
+
+		return encodeURIComponent(arrayToString);
+	}, [genres]);
+
+	const computedSliderValue = useMemo(() => {
+		const currentValue: number[] | any = ratingValue;
+
+		return {
+			'voteAverageGte': currentValue[0].toString(),
+			'voteAverageLte': currentValue[1].toString(),
+		};
+	}, [ratingValue]);
+
+	const computedDefaultRatingValue = useMemo(() => {
+		if (!(searchParams.get('vote_average.gte') || searchParams.get('vote_average.lte'))) {
+			return [0, 10];
+		}
+
+		const voteGte = searchParams.get('vote_average.gte');
+		const voteLte = searchParams.get('vote_average.lte');
+
+		return [
+			parseInt(voteGte || '0'),
+			parseInt(voteLte || '10'),
+		];
+	}, [searchParams]);
+
+	useEffect(() => {
+		setRatingValue(computedDefaultRatingValue);
+	}, [computedDefaultRatingValue]);
 
 	return (
 		<>
@@ -88,8 +123,8 @@ export default function FilterPopup () {
 											maxValue={10}
 											minValue={0}
 											className="max-w-md"
-											value={computedSliderValue}
-											onChange={onRatingsChangeHandler}
+											defaultValue={computedDefaultRatingValue}
+											onChange={setRatingHandler}
 											renderLabel={() => (
 												<div className="font-medium">Ratings:</div>
 											)}
