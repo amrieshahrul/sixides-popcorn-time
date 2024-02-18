@@ -26,7 +26,7 @@ export default function MovieTile ({ movieId, title, releaseDate, posterPath, on
 	}, [posterPath]);
 
 	return (
-		<Card className="py-4 pt-0 w-full">
+		<Card className="py-4 pt-0 w-full h-full">
 			<CardBody className="overflow-visible py-2">
 				<Image
 					alt={title}
