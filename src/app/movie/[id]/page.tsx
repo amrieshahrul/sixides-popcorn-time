@@ -1,10 +1,40 @@
 import ImageFallback from '@/components/ImageFallback';
 import { getFullPathImage } from '@/helpers/string';
+import { getYearFormat } from '@/helpers/time';
 import { CastType } from '@/interfaces/movie';
 import {
 	fetchMovieDetails,
 	fetchMovieCastDetails,
 } from '@/lib/movie-api';
+import type { Metadata, ResolvingMetadata } from 'next';
+
+type Props = {
+	params: { id: string }
+	searchParams: { [key: string]: string | string[] | undefined }
+};
+
+export async function generateMetadata (
+	{ params, searchParams }: Props,
+	parent: ResolvingMetadata,
+): Promise<Metadata> {
+	const id = params.id;
+
+	let titleWithYear = '';
+
+	const { title, overview, release_date } = await fetchMovieDetails(id);
+
+	if (release_date) {
+		titleWithYear = `${title} (${getYearFormat(release_date)})`;
+	} else {
+		titleWithYear = title;
+	}
+
+
+	return {
+		title: titleWithYear,
+		description: overview,
+	};
+};
 
 export default async function MovieDetail ({
 	params,

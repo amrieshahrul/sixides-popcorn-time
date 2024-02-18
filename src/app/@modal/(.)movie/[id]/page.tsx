@@ -1,5 +1,3 @@
-
-import customMotionProps from '@/configs/customMotionProps.js';
 import {
 	fetchMovieDetails,
 	fetchMovieCastDetails,

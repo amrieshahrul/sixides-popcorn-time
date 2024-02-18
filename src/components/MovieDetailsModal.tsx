@@ -78,7 +78,7 @@ export default function MovieDetailsModal ({
 									height={300}
 									alt={movieDetails?.tagline ?? ''}
 									fallbackImage="/default-movie-poster.svg"
-									className="rounded-xl h-96 w-3/4 mx-auto md:mx-0 md:w-auto"
+									className="rounded-xl h-60 lg:h-96 mx-auto md:mx-0 w-auto"
 								/>
 								<div className="flex flex-col gap-y-4">
 									<div className="">
