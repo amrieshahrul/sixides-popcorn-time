@@ -45,7 +45,6 @@ export default function MovieDetailsModal ({
 	});
 
 	const onCloseHandler = () => {
-		onClose();
 		router.back();
 	};
 
