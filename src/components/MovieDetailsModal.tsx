@@ -54,12 +54,14 @@ export default function MovieDetailsModal ({
 
 	return (
 		<Modal
-			isOpen={isOpen}
-			onOpenChange={onOpenChange}
+			defaultOpen
 			onClose={onCloseHandler}
 			scrollBehavior={'inside'}
 			placement="center"
 			size="5xl"
+			classNames={{
+				backdrop: 'bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20',
+			}}
 			motionProps={customMotionProps}
 		>
 			<ModalContent>
@@ -129,7 +131,7 @@ export default function MovieDetailsModal ({
 							</div>
 						</ModalBody>
 						<ModalFooter>
-							<Button color="danger" onPress={onClose}>
+							<Button color="danger" onClick={onClose}>
 								Close
 							</Button>
 						</ModalFooter>
