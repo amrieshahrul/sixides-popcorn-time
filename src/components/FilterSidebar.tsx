@@ -102,7 +102,7 @@ export default function FilterSidebar () {
 	]);
 
 	return (
-		<div className="flex flex-col gap-y-8">
+		<div className="flex flex-col gap-y-8 sticky top-12">
 			{/* <div className="released-date">
 				<div className="font-medium mb-2">Release Dates:</div>
 				<div className="flex flex-col gap-y-3">
